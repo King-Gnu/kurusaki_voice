@@ -309,7 +309,7 @@ class MusicPlayer(commands.Cog, name='Music'):
         msg.voice_client.source.volume = self.player[msg.guild.id]['volume']
         return msg.voice_client
 
-    @command()
+    @command(aliases=["p"])
     async def play(self, msg, *, song):
         """
         Play a song with given url or title from Youtube
@@ -392,7 +392,7 @@ class MusicPlayer(commands.Cog, name='Music'):
         return await msg.send("Bot not in voice channel or playing music")
 
     @commands.has_permissions(manage_channels=True)
-    @command(aliases=['restart-loop'])
+    @command(aliases=['restart-loop','clear'])
     async def reset(self, msg):
         """
         Restart the currently playing song  from the begining
@@ -412,7 +412,7 @@ class MusicPlayer(commands.Cog, name='Music'):
         msg.voice_client.stop()
 
     @commands.has_permissions(manage_channels=True)
-    @command()
+    @command(aliases=['s'])
     async def skip(self, msg):
         """
         Skip the current playing song
@@ -433,7 +433,7 @@ class MusicPlayer(commands.Cog, name='Music'):
         return await msg.message.add_reaction(emoji='✅')
 
     @commands.has_permissions(manage_channels=True)
-    @command()
+    @command(aliases=['end'])
     async def stop(self, msg):
         """
         Stop the current playing songs and clear the queue
@@ -456,7 +456,7 @@ class MusicPlayer(commands.Cog, name='Music'):
             return await msg.send(f"**{msg.author.display_name}, there is no audio currently playing or songs in queue**")
 
     @commands.has_permissions(manage_channels=True)
-    @command(aliases=['get-out', 'disconnect', 'leave-voice'])
+    @command(aliases=['get-out', 'disconnect', 'leave-voice','dc'])
     async def leave(self, msg):
         """
         Disconnect the bot from the voice channel
@@ -525,9 +525,9 @@ class MusicPlayer(commands.Cog, name='Music'):
                             name=f"**{i['author'].author.name}**", value=i['title'], inline=False)
                     return await msg.send(embed=emb, delete_after=120)
 
-        return await msg.send("No songs in queue")
+        return await msg.send(embed=discord.Embed(title='Queue for '+msg.guild.name,description='Nothing'))
 
-    @command(name='song-info', aliases=['song?', 'nowplaying', 'current-song'])
+    @command(name='song-info', aliases=['song?', 'nowplaying', 'current-song','np'])
     async def song_info(self, msg):
         """
         Show information about the current playing song
@@ -545,7 +545,7 @@ class MusicPlayer(commands.Cog, name='Music'):
 
         return await msg.send(f"**No songs currently playing**".title(), delete_after=30)
 
-    @command(aliases=['move-bot', 'move-b', 'mb', 'mbot'])
+    @command(aliases=['move-bot', 'move-b', 'mb', 'mbot','j'])
     async def join(self, msg, *, channel: discord.VoiceChannel = None):
         """
         Make bot join a voice channel you are in if no channel is mentioned
