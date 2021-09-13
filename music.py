@@ -209,7 +209,7 @@ class MusicPlayer(commands.Cog, name='Music'):
             return await msg.send(f"Added playlist {data['title']} to queue")
         self.player[msg.guild.id]['queue'].append(
             {'title': title, 'author': msg})
-        return await msg.send(f"**{title} added to queue**".title())
+        return await msg.send(embed=discord.Embed(description=f"**{title} added to queue**".title()))
 
     async def voice_check(self, msg):
         """
@@ -406,7 +406,7 @@ class MusicPlayer(commands.Cog, name='Music'):
             return await msg.send(f"**{msg.author.display_name}, you must be in the same voice channel as the bot.**")
 
         if self.player[msg.guild.id]['queue'] and msg.voice_client.is_playing() is False:
-            return await msg.send("**No audio currently playing or songs in queue**".title(), delete_after=25)
+            return await msg.send("**No audio currently playing or songs in queue**".title())
 
         self.player[msg.guild.id]['reset'] = True
         msg.voice_client.stop()
@@ -420,13 +420,13 @@ class MusicPlayer(commands.Cog, name='Music'):
         `Command:` skip()
         """
         if msg.voice_client is None:
-            return await msg.send("**No music currently playing**".title(), delete_after=60)
+            return await msg.send("**No music currently playing**".title())
 
         if msg.author.voice is None or msg.author.voice.channel != msg.voice_client.channel:
             return await msg.send("Please join the same voice channel as the bot")
 
         if not self.player[msg.guild.id]['queue'] and msg.voice_client.is_playing() is False:
-            return await msg.send("**No songs in queue to skip**".title(), delete_after=60)
+            return await msg.send("**No songs in queue to skip**".title())
 
         self.player[msg.guild.id]['repeat'] = False
         msg.voice_client.stop()
@@ -523,7 +523,7 @@ class MusicPlayer(commands.Cog, name='Music'):
                     for i in self.player[msg.guild.id]['queue']:
                         emb.add_field(
                             name=f"**{i['author'].author.name}**", value=i['title'], inline=False)
-                    return await msg.send(embed=emb, delete_after=120)
+                    return await msg.send(embed=emb)
 
         return await msg.send(embed=discord.Embed(title='Queue for '+msg.guild.name,description='Nothing'))
 
@@ -541,9 +541,9 @@ class MusicPlayer(commands.Cog, name='Music'):
                 text=f"{self.player[msg.guild.id]['author'].author.name}")
             emb.set_thumbnail(
                 url=self.player[msg.guild.id]['player'].thumbnail)
-            return await msg.send(embed=emb, delete_after=120)
+            return await msg.send(embed=emb)
 
-        return await msg.send(f"**No songs currently playing**".title(), delete_after=30)
+        return await msg.send(f"**No songs currently playing**".title())
 
     @command(aliases=['move-bot', 'move-b', 'mb', 'mbot','j'])
     async def join(self, msg, *, channel: discord.VoiceChannel = None):
@@ -600,7 +600,7 @@ class MusicPlayer(commands.Cog, name='Music'):
                     #     self.music[str(msg.guild.id)]['vol']=vol
                     return await msg.message.add_reaction(emoji='✅')
 
-        return await msg.send("**Please join the same voice channel as the bot to use the command**".title(), delete_after=30)
+        return await msg.send("**Please join the same voice channel as the bot to use the command**".title())
 
     @commands.command(brief='Download songs', description='[prefix]download <video url or title> Downloads the song')
     async def download(self, ctx, *, song):
@@ -622,7 +622,7 @@ class MusicPlayer(commands.Cog, name='Music'):
                 filename = ydl.prepare_filename(download)
                 embed = discord.Embed(
                     title="Your download is ready", description="Please wait a moment while the file is beeing uploaded")
-                await ctx.send(embed=embed, delete_after=30)
+                await ctx.send(embed=embed)
                 await ctx.send(file=discord.File(filename))
                 os.remove(filename)
         except (youtube_dl.utils.ExtractorError, youtube_dl.utils.DownloadError):
@@ -632,7 +632,7 @@ class MusicPlayer(commands.Cog, name='Music'):
     @volume.error
     async def volume_error(self, msg,error):
         if isinstance(error, commands.MissingPermissions):
-            return await msg.send("Manage channels or admin perms required to change volume", delete_after=30)
+            return await msg.send("Manage channels or admin perms required to change volume")
 
 
 def setup(bot):
