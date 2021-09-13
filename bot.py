@@ -5,9 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
-
-
 def get_prefix(bot, msg):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
@@ -17,26 +14,17 @@ def get_prefix(bot, msg):
 
 bot=commands.Bot(command_prefix=get_prefix,description='Multipurpose Discord Bot')
 
-
-
-
 exts=['music'] #Add your Cog extensions here
-
 
 @bot.event
 async def on_ready():
     song_name='TWICE - What is love?'  #Status name
     activity_type=discord.ActivityType.listening #Status type
     await bot.change_presence(activity=discord.Activity(type=activity_type,name="splay song name"))
+    await bot.get_channel(744650347598839899).send("んにゃ")
     print(bot.user.name)
-
-
-
-
-
 
 for i in exts:
     bot.load_extension(i)
-
 
 bot.run(os.environ['TOKEN'])
