@@ -292,7 +292,7 @@ class MusicPlayer(commands.Cog, name='Music'):
                             description=download.title, url=download.url)
         emb.set_thumbnail(url=download.thumbnail)
         emb.set_footer(
-            text=f'Requested by {msg.author.display_name}', icon_url=msg.author.avatar_url)
+            text=f'Requested by {msg.author.display_name}')
         loop = asyncio.get_event_loop()
 
         if data['queue']:
@@ -519,7 +519,7 @@ class MusicPlayer(commands.Cog, name='Music'):
                     emb = discord.Embed(
                         colour=self.random_color, title='queue')
                     emb.set_footer(
-                        text=f'Command used by {msg.author.name}', icon_url=msg.author.avatar_url)
+                        text=f'Command used by {msg.author.name}')
                     for i in self.player[msg.guild.id]['queue']:
                         emb.add_field(
                             name=f"**{i['author'].author.name}**", value=i['title'], inline=False)
@@ -538,7 +538,7 @@ class MusicPlayer(commands.Cog, name='Music'):
             emb = discord.Embed(colour=self.random_color, title='Currently Playing',
                                 description=self.player[msg.guild.id]['player'].title)
             emb.set_footer(
-                text=f"{self.player[msg.guild.id]['author'].author.name}", icon_url=msg.author.avatar_url)
+                text=f"{self.player[msg.guild.id]['author'].author.name}")
             emb.set_thumbnail(
                 url=self.player[msg.guild.id]['player'].thumbnail)
             return await msg.send(embed=emb, delete_after=120)
